@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SANTS | A State-Adaptive Scheduler for World Action Models</title>
+    <meta
+      name="description"
+      content="SANTS selects action-useful intermediate video states for World Action Models, improving success-latency tradeoffs in robot manipulation."
+    >
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-nav" aria-label="Primary navigation">
+      <a class="brand" href="#top">SANTS</a>
+      <nav class="nav-links" aria-label="Page sections">
+        <a href="#overview">Overview</a>
+        <a href="#why-adaptive">Why adaptive?</a>
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#robots">Robots</a>
+        <a href="#citation">Citation</a>
+      </nav>
+      <div class="nav-actions" aria-label="Paper resources">
+        <a class="resource-button arxiv-button" href="#citation" aria-label="Paper on arXiv">
+          <span class="button-icon arxiv-mark" aria-hidden="true">arXiv</span>
+          <span>Paper</span>
+        </a>
+        <a class="resource-button github-button" href="#citation" aria-label="Code on GitHub">
+          <svg class="button-icon github-mark" aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+            <path d="M12 2C6.48 2 2 6.58 2 12.22c0 4.52 2.87 8.35 6.84 9.71.5.09.68-.22.68-.49 0-.24-.01-1.05-.01-1.91-2.78.62-3.37-1.22-3.37-1.22-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.63.07-.63 1.01.07 1.54 1.06 1.54 1.06.89 1.57 2.34 1.12 2.91.86.09-.66.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.05 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.72 0 0 .84-.28 2.75 1.05A9.35 9.35 0 0 1 12 6.92c.85 0 1.7.12 2.5.35 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.46.1 2.72.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.9 0 1.38-.01 2.49-.01 2.82 0 .27.18.59.69.49A10.1 10.1 0 0 0 22 12.22C22 6.58 17.52 2 12 2Z"></path>
+          </svg>
+          <span>Code</span>
+        </a>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <video class="hero-video" autoplay muted controls playsinline poster="assets/hero-sants-poster.jpg">
+          <source src="assets/hero-sants-loop.mp4" type="video/mp4">
+        </video>
+        <div class="hero-scrim" aria-hidden="true"></div>
+        <div class="hero-content">
+          <p class="eyebrow">World Action Models / Robot Learning</p>
+          <h1 id="hero-title">SANTS</h1>
+          <p class="subtitle">A State-Adaptive Scheduler for World Action Models</p>
+          <p class="claim">
+            World Action Models do not always need a fully denoised future.
+            SANTS selects the action-useful intermediate video state at inference time,
+            preserving future reasoning while removing redundant video denoising.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#overview">Read overview</a>
+            <a class="button secondary" href="#results">View results</a>
+          </div>
+        </div>
+        <div class="metric-grid" aria-label="Headline results">
+          <div class="metric">
+            <span class="metric-value">94.4%</span>
+            <span class="metric-label">RoboTwin 2.0 success</span>
+          </div>
+          <div class="metric">
+            <span class="metric-value">73.1%</span>
+            <span class="metric-label">real-robot mean success</span>
+          </div>
+          <div class="metric">
+            <span class="metric-value">81.7%</span>
+            <span class="metric-label">RoboTwin latency reduction</span>
+          </div>
+          <div class="metric">
+            <span class="metric-value">79.0%</span>
+            <span class="metric-label">real-robot latency reduction</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="overview" class="section compact" aria-labelledby="overview-title">
+        <div class="section-heading">
+          <p class="eyebrow">One-minute summary</p>
+          <h2 id="overview-title">Adaptive video denoising for action, not pixels.</h2>
+        </div>
+        <div class="summary-grid">
+          <article class="summary-item">
+            <h3>Problem</h3>
+            <p>Full video denoising is expensive, and the final clean video is not always the best condition for action generation.</p>
+          </article>
+          <article class="summary-item">
+            <h3>Insight</h3>
+            <p>Action utility along the video noise trajectory is state dependent: coarse motion often needs less refinement than contact-rich manipulation.</p>
+          </article>
+          <article class="summary-item">
+            <h3>Solution</h3>
+            <p>SANTS learns when to stop denoising and how far to jump if more future evolution remains useful.</p>
+          </article>
+        </div>
+        <figure class="schedule-figure">
+          <img src="assets/tutu0.png" alt="Comparison between a fixed denoising schedule and the SANTS adaptive schedule.">
+          <figcaption>
+            Fixed denoising spends the same budget everywhere. SANTS instead jumps through easy states, refines contact-rich states, and stops before redundant future-video updates.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section id="why-adaptive" class="section split" aria-labelledby="why-title">
+        <div class="section-copy">
+          <p class="eyebrow">Why adaptive?</p>
+          <h2 id="why-title">The best future condition is state dependent.</h2>
+          <p>
+            Controlled depth scans show that video refinement can reduce action error, but the gain saturates and sometimes reverses.
+            Coarse phases often obtain enough action cues after shallow denoising, while fine contact and alignment phases benefit from deeper future evolution.
+          </p>
+          <p>
+            This turns WAM inference into a state-dependent selection problem: choose the intermediate video representation that helps action generation, rather than always waiting for the fully denoised endpoint.
+          </p>
+        </div>
+        <figure class="media-panel">
+          <img src="../figures/sants_denoising_depth_diagnostic.png" alt="Denoising depth diagnostic curves comparing action error across coarse and fine phases.">
+          <figcaption>Denoising-depth diagnostic: action usefulness changes along the video trajectory and across task phases.</figcaption>
+        </figure>
+      </section>
+
+      <section id="method" class="section" aria-labelledby="method-title">
+        <div class="section-heading narrow">
+          <p class="eyebrow">Method</p>
+          <h2 id="method-title">Stop or jump along the noise trajectory.</h2>
+          <p>
+            SANTS attaches a lightweight scheduler to a frozen video-action diffusion policy. At each video decision point,
+            it reads the current video-state representation and noise level, then predicts both stopping evidence and a relative noise-progression ratio.
+          </p>
+        </div>
+        <figure class="wide-figure">
+          <img src="assets/mainpic_cropped.png" alt="SANTS architecture figure from the paper showing the frozen video-action policy and adaptive scheduler.">
+          <figcaption>SANTS keeps the WAM backbone frozen and learns a scheduler optimized by downstream action quality and inference cost.</figcaption>
+        </figure>
+        <div class="method-steps" aria-label="SANTS decision flow">
+          <article>
+            <span class="step-number">01</span>
+            <h3>Read state</h3>
+            <p>Use the pooled video representation and current noise level as scheduler state.</p>
+          </article>
+          <article>
+            <span class="step-number">02</span>
+            <h3>Stop</h3>
+            <p>Accumulate hazard evidence to decide whether the current intermediate video state is sufficient.</p>
+          </article>
+          <article>
+            <span class="step-number">03</span>
+            <h3>Jump</h3>
+            <p>If continuing, predict a relative progression ratio instead of following a fixed denoising grid.</p>
+          </article>
+          <article>
+            <span class="step-number">04</span>
+            <h3>Act</h3>
+            <p>Pass the selected terminal video representation to the frozen action branch.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="results" class="section results" aria-labelledby="results-title">
+        <div class="section-heading">
+          <p class="eyebrow">Results</p>
+          <h2 id="results-title">Better success-latency tradeoffs than fixed denoising.</h2>
+        </div>
+        <div class="results-grid">
+          <figure class="media-panel result-plot">
+            <img src="../figures/sants_exp_pareto_success_latency.png" alt="Success-latency tradeoff plot highlighting SANTS.">
+          </figure>
+          <div class="result-cards" aria-label="Result highlights">
+            <p class="result-note">SANTS keeps strong WAM-style future reasoning while removing much of the video-denoising cost.</p>
+            <article>
+              <h3>RoboTwin 2.0</h3>
+              <p><strong>94.4%</strong> overall success at <strong>523.7 ms</strong> inference latency.</p>
+            </article>
+            <article>
+              <h3>Ablations</h3>
+              <p>Adaptive stop and adaptive jump are complementary; using both gives the strongest success-latency tradeoff.</p>
+            </article>
+          </div>
+        </div>
+        <div class="evidence-grid">
+          <div class="table-wrap" role="region" aria-label="RoboTwin comparison table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Setting</th>
+                  <th>Success</th>
+                  <th>Latency</th>
+                  <th>Message</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Full-denoising WAM</td>
+                  <td>92.2%</td>
+                  <td>2868.4 ms</td>
+                  <td>Accurate but slow</td>
+                </tr>
+                <tr>
+                  <td>Fast-WAM</td>
+                  <td>91.8%</td>
+                  <td>190 ms</td>
+                  <td>Fast fixed acceleration</td>
+                </tr>
+                <tr class="highlight-row">
+                  <td>SANTS</td>
+                  <td>94.4%</td>
+                  <td>523.7 ms</td>
+                  <td>Best success with large latency reduction</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <figure class="ablation-panel">
+            <img src="../figures/sants_exp_stop_jump_ablation.png" alt="Ablation plot comparing fixed schedules, stop-only, jump-only, and full SANTS.">
+            <figcaption>Ablation: terminal-state selection and relative noise progression work best together.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="robots" class="section" aria-labelledby="robots-title">
+        <div class="section-heading">
+          <p class="eyebrow">Robot evaluation</p>
+          <h2 id="robots-title">SANTS improves real-robot manipulation under tight control latency.</h2>
+          <p>
+            Across bimanual manipulation and UR10 kitchen tasks, SANTS reaches <strong>73.1% mean success</strong> at <strong>581.3 ms</strong> average policy latency by selecting intermediate future-video states without running full video denoising at every decision.
+          </p>
+        </div>
+        <div class="robot-video-grid">
+          <article class="robot-video-card">
+            <div class="robot-video-shell" aria-label="AgileX dual-arm clothes folding video position">
+              <span class="play-glyph" aria-hidden="true"></span>
+            </div>
+            <p class="platform">AgileX dual-arm</p>
+            <h3>Clothes folding</h3>
+          </article>
+          <article class="robot-video-card">
+            <div class="robot-video-shell" aria-label="AgileX dual-arm backpack packing video position">
+              <span class="play-glyph" aria-hidden="true"></span>
+            </div>
+            <p class="platform">AgileX dual-arm</p>
+            <h3>Backpack packing</h3>
+          </article>
+          <article class="robot-video-card">
+            <div class="robot-video-shell" aria-label="AgileX dual-arm sock placement video position">
+              <span class="play-glyph" aria-hidden="true"></span>
+            </div>
+            <p class="platform">AgileX dual-arm</p>
+            <h3>Sock placement</h3>
+          </article>
+          <article class="robot-video-card">
+            <div class="robot-video-shell" aria-label="AgileX dual-arm charger insertion video position">
+              <span class="play-glyph" aria-hidden="true"></span>
+            </div>
+            <p class="platform">AgileX dual-arm</p>
+            <h3>Charger insertion</h3>
+          </article>
+          <article class="robot-video-card">
+            <div class="robot-video-shell" aria-label="UR10 kitchen plate transfer video position">
+              <span class="play-glyph" aria-hidden="true"></span>
+            </div>
+            <p class="platform">UR10 kitchen</p>
+            <h3>Plate transfer</h3>
+          </article>
+          <article class="robot-video-card">
+            <div class="robot-video-shell" aria-label="UR10 kitchen fridge placement video position">
+              <span class="play-glyph" aria-hidden="true"></span>
+            </div>
+            <p class="platform">UR10 kitchen</p>
+            <h3>Fridge placement</h3>
+          </article>
+          <article class="robot-video-card">
+            <div class="robot-video-shell" aria-label="UR10 kitchen fruit sorting video position">
+              <span class="play-glyph" aria-hidden="true"></span>
+            </div>
+            <p class="platform">UR10 kitchen</p>
+            <h3>Fruit sorting</h3>
+          </article>
+        </div>
+      </section>
+
+      <section class="section split" aria-labelledby="learns-title">
+        <div class="section-copy">
+          <p class="eyebrow">What SANTS learns</p>
+          <h2 id="learns-title">SANTS spends denoising where actions need it.</h2>
+          <p>
+            The scheduler does not simply run fewer steps everywhere. It allocates larger video-denoising budgets to contact,
+            alignment, and insertion states while stopping earlier when the action intent is already clear.
+          </p>
+        </div>
+        <figure class="media-panel">
+          <img src="../figures/sants_robotwin_budget_trajectory_selected_new_imputed_relative_style.png" alt="Budget trajectory traces showing state-dependent denoising depth over closed-loop rollouts.">
+          <figcaption>Closed-loop trajectories show varying terminal denoising depth across states.</figcaption>
+        </figure>
+      </section>
+
+      <section id="citation" class="section citation" aria-labelledby="citation-title">
+        <div class="section-heading narrow">
+          <p class="eyebrow">Paper materials</p>
+          <h2 id="citation-title">Citation</h2>
+          <p>Anonymous submission metadata can be replaced after the public preprint or camera-ready release.</p>
+        </div>
+        <pre><code>@article{sants2026,
+  title={SANTS: A State-Adaptive Scheduler for World Action Models},
+  author={Anonymous},
+  year={2026}
+}</code></pre>
+      </section>
+    </main>
+  </body>
+</html>
