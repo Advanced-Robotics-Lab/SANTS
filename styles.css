@@ -557,6 +557,12 @@ tr:last-child td {
   grid-column: span 2;
 }
 
+.robot-video-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
 .robot-video {
   display: block;
   width: 100%;
@@ -566,6 +572,47 @@ tr:last-child td {
   background: #1f2328;
   box-shadow: var(--shadow);
   object-fit: cover;
+}
+
+.robot-video-load {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0;
+  color: #ffffff;
+  background: linear-gradient(180deg, rgba(31, 35, 40, 0.05), rgba(31, 35, 40, 0.46));
+  cursor: pointer;
+  font: inherit;
+  font-weight: 850;
+}
+
+.robot-video-load::before {
+  width: 0;
+  height: 0;
+  content: "";
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-left: 18px solid #ffffff;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.38));
+}
+
+.robot-video-load span {
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  background: rgba(31, 35, 40, 0.58);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+.robot-video-load:hover,
+.robot-video-load:focus-visible {
+  background: linear-gradient(180deg, rgba(15, 118, 110, 0.08), rgba(31, 35, 40, 0.58));
+}
+
+.robot-video-frame.is-loaded .robot-video-load {
+  display: none;
 }
 
 .platform {

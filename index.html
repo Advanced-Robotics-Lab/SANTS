@@ -95,7 +95,7 @@
           </article>
         </div>
         <figure class="schedule-figure">
-          <img src="assets/tutu0.png" alt="Comparison between a fixed denoising schedule and the SANTS adaptive schedule.">
+          <img src="assets/tutu0.png" loading="lazy" decoding="async" alt="Comparison between a fixed denoising schedule and the SANTS adaptive schedule.">
           <figcaption>
             Fixed denoising spends the same budget everywhere. SANTS instead jumps through easy states, refines contact-rich states, and stops before redundant future-video updates.
           </figcaption>
@@ -115,7 +115,7 @@
           </p>
         </div>
         <figure class="media-panel">
-          <img src="figures/sants_denoising_depth_diagnostic.png" alt="Denoising depth diagnostic curves comparing action error across coarse and fine phases.">
+          <img src="figures/sants_denoising_depth_diagnostic.png" loading="lazy" decoding="async" alt="Denoising depth diagnostic curves comparing action error across coarse and fine phases.">
           <figcaption>Denoising-depth diagnostic: action usefulness changes along the video trajectory and across task phases.</figcaption>
         </figure>
       </section>
@@ -130,7 +130,7 @@
           </p>
         </div>
         <figure class="wide-figure">
-          <img src="assets/mainpic_cropped.png" alt="SANTS architecture figure from the paper showing the frozen video-action policy and adaptive scheduler.">
+          <img src="assets/mainpic_cropped.png" loading="lazy" decoding="async" alt="SANTS architecture figure from the paper showing the frozen video-action policy and adaptive scheduler.">
           <figcaption>SANTS keeps the WAM backbone frozen and learns a scheduler optimized by downstream action quality and inference cost.</figcaption>
         </figure>
         <div class="method-steps" aria-label="SANTS decision flow">
@@ -164,7 +164,7 @@
         </div>
         <div class="results-grid">
           <figure class="media-panel result-plot">
-            <img src="figures/sants_exp_pareto_success_latency.png" alt="Success-latency tradeoff plot highlighting SANTS.">
+            <img src="figures/sants_exp_pareto_success_latency.png" loading="lazy" decoding="async" alt="Success-latency tradeoff plot highlighting SANTS.">
           </figure>
           <div class="result-cards" aria-label="Result highlights">
             <p class="result-note">SANTS keeps strong WAM-style future reasoning while removing much of the video-denoising cost.</p>
@@ -206,7 +206,7 @@
             </table>
           </div>
           <figure class="ablation-panel">
-            <img src="figures/sants_exp_stop_jump_ablation.png" alt="Ablation plot comparing fixed schedules, stop-only, jump-only, and full SANTS.">
+            <img src="figures/sants_exp_stop_jump_ablation.png" loading="lazy" decoding="async" alt="Ablation plot comparing fixed schedules, stop-only, jump-only, and full SANTS.">
             <figcaption>Ablation: terminal-state selection and relative noise progression work best together.</figcaption>
           </figure>
         </div>
@@ -222,51 +222,72 @@
         </div>
         <div class="robot-video-grid">
           <article class="robot-video-card">
-            <video class="robot-video" controls preload="metadata" playsinline>
-              <source src="assets/robot-charger-insertion.mp4" type="video/mp4">
-            </video>
+            <div class="robot-video-frame">
+              <video class="robot-video" preload="none" playsinline poster="assets/robot-charger-insertion-poster.jpg" data-src="assets/robot-charger-insertion.mp4" aria-label="AgileX dual-arm charger insertion video"></video>
+              <button class="robot-video-load" type="button" aria-label="Load charger insertion video">
+                <span>Play</span>
+              </button>
+            </div>
             <p class="platform">AgileX dual-arm</p>
             <h3>Charger insertion</h3>
           </article>
           <article class="robot-video-card">
-            <video class="robot-video" controls preload="metadata" playsinline>
-              <source src="assets/robot-backpack-packing.mp4" type="video/mp4">
-            </video>
+            <div class="robot-video-frame">
+              <video class="robot-video" preload="none" playsinline poster="assets/robot-backpack-packing-poster.jpg" data-src="assets/robot-backpack-packing.mp4" aria-label="AgileX dual-arm backpack packing video"></video>
+              <button class="robot-video-load" type="button" aria-label="Load backpack packing video">
+                <span>Play</span>
+              </button>
+            </div>
             <p class="platform">AgileX dual-arm</p>
             <h3>Backpack packing</h3>
           </article>
           <article class="robot-video-card">
-            <video class="robot-video" controls preload="metadata" playsinline>
-              <source src="assets/robot-sock-placement.mp4" type="video/mp4">
-            </video>
+            <div class="robot-video-frame">
+              <video class="robot-video" preload="none" playsinline poster="assets/robot-sock-placement-poster.jpg" data-src="assets/robot-sock-placement.mp4" aria-label="AgileX dual-arm sock placement video"></video>
+              <button class="robot-video-load" type="button" aria-label="Load sock placement video">
+                <span>Play</span>
+              </button>
+            </div>
             <p class="platform">AgileX dual-arm</p>
             <h3>Sock placement</h3>
           </article>
           <article class="robot-video-card">
-            <video class="robot-video" controls preload="metadata" playsinline>
-              <source src="assets/robot-clothes-folding.mp4" type="video/mp4">
-            </video>
+            <div class="robot-video-frame">
+              <video class="robot-video" preload="none" playsinline poster="assets/robot-clothes-folding-poster.jpg" data-src="assets/robot-clothes-folding.mp4" aria-label="AgileX dual-arm clothes folding video"></video>
+              <button class="robot-video-load" type="button" aria-label="Load clothes folding video">
+                <span>Play</span>
+              </button>
+            </div>
             <p class="platform">AgileX dual-arm</p>
             <h3>Clothes folding</h3>
           </article>
           <article class="robot-video-card">
-            <video class="robot-video" controls preload="metadata" playsinline>
-              <source src="assets/robot-plate-transfer.mp4" type="video/mp4">
-            </video>
+            <div class="robot-video-frame">
+              <video class="robot-video" preload="none" playsinline poster="assets/robot-plate-transfer-poster.jpg" data-src="assets/robot-plate-transfer.mp4" aria-label="UR10 kitchen plate transfer video"></video>
+              <button class="robot-video-load" type="button" aria-label="Load plate transfer video">
+                <span>Play</span>
+              </button>
+            </div>
             <p class="platform">UR10 kitchen</p>
             <h3>Plate transfer</h3>
           </article>
           <article class="robot-video-card">
-            <video class="robot-video" controls preload="metadata" playsinline>
-              <source src="assets/robot-fridge-placement.mp4" type="video/mp4">
-            </video>
+            <div class="robot-video-frame">
+              <video class="robot-video" preload="none" playsinline poster="assets/robot-fridge-placement-poster.jpg" data-src="assets/robot-fridge-placement.mp4" aria-label="UR10 kitchen fridge placement video"></video>
+              <button class="robot-video-load" type="button" aria-label="Load fridge placement video">
+                <span>Play</span>
+              </button>
+            </div>
             <p class="platform">UR10 kitchen</p>
             <h3>Fridge placement</h3>
           </article>
           <article class="robot-video-card">
-            <video class="robot-video" controls preload="metadata" playsinline>
-              <source src="assets/robot-fruit-sorting.mp4" type="video/mp4">
-            </video>
+            <div class="robot-video-frame">
+              <video class="robot-video" preload="none" playsinline poster="assets/robot-fruit-sorting-poster.jpg" data-src="assets/robot-fruit-sorting.mp4" aria-label="UR10 kitchen fruit sorting video"></video>
+              <button class="robot-video-load" type="button" aria-label="Load fruit sorting video">
+                <span>Play</span>
+              </button>
+            </div>
             <p class="platform">UR10 kitchen</p>
             <h3>Fruit sorting</h3>
           </article>
@@ -283,7 +304,7 @@
           </p>
         </div>
         <figure class="media-panel">
-          <img src="figures/sants_robotwin_budget_trajectory_selected_new_imputed_relative_style.png" alt="Budget trajectory traces showing state-dependent denoising depth over closed-loop rollouts.">
+          <img src="figures/sants_robotwin_budget_trajectory_selected_new_imputed_relative_style.png" loading="lazy" decoding="async" alt="Budget trajectory traces showing state-dependent denoising depth over closed-loop rollouts.">
           <figcaption>Closed-loop trajectories show varying terminal denoising depth across states.</figcaption>
         </figure>
       </section>
@@ -301,5 +322,44 @@
 }</code></pre>
       </section>
     </main>
+    <script>
+      (() => {
+        const loadRobotVideo = (frame) => {
+          const video = frame.querySelector(".robot-video");
+          const button = frame.querySelector(".robot-video-load");
+
+          if (!video || !video.dataset.src) {
+            return;
+          }
+
+          if (!video.dataset.loaded) {
+            const source = document.createElement("source");
+            source.src = video.dataset.src;
+            source.type = "video/mp4";
+            video.appendChild(source);
+            video.dataset.loaded = "true";
+            video.controls = true;
+            video.load();
+          }
+
+          frame.classList.add("is-loaded");
+          if (button) {
+            button.hidden = true;
+          }
+
+          const playPromise = video.play();
+          if (playPromise) {
+            playPromise.catch(() => undefined);
+          }
+        };
+
+        document.querySelectorAll(".robot-video-frame").forEach((frame) => {
+          const button = frame.querySelector(".robot-video-load");
+          if (button) {
+            button.addEventListener("click", () => loadRobotVideo(frame));
+          }
+        });
+      })();
+    </script>
   </body>
 </html>
