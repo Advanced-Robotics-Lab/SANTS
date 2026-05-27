@@ -557,52 +557,15 @@ tr:last-child td {
   grid-column: span 2;
 }
 
-.robot-video-shell {
-  position: relative;
+.robot-video {
+  display: block;
+  width: 100%;
   aspect-ratio: 16 / 9;
-  overflow: hidden;
   border: 1px solid rgba(75, 100, 117, 0.32);
   border-radius: var(--radius);
-  background:
-    linear-gradient(135deg, rgba(15, 118, 110, 0.35), rgba(31, 35, 40, 0.88)),
-    #1f2328;
+  background: #1f2328;
   box-shadow: var(--shadow);
-}
-
-.robot-video-shell::after {
-  position: absolute;
-  inset: 0;
-  content: "";
-  background:
-    linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-  background-size: 28px 28px;
-  opacity: 0.18;
-}
-
-.play-glyph {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 1;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  transform: translate(-50%, -50%);
-}
-
-.play-glyph::after {
-  position: absolute;
-  top: 50%;
-  left: 52%;
-  width: 0;
-  height: 0;
-  content: "";
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-left: 16px solid var(--teal-dark);
-  transform: translate(-50%, -50%);
+  object-fit: cover;
 }
 
 .platform {
