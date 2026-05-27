@@ -15,7 +15,7 @@
       <a class="brand" href="#top">SANTS</a>
       <nav class="nav-links" aria-label="Page sections">
         <a href="#overview">Overview</a>
-        <a href="#why-adaptive">Why adaptive?</a>
+        <a href="#why-adaptive">Motivation</a>
         <a href="#method">Method</a>
         <a href="#results">Results</a>
         <a href="#robots">Robots</a>
@@ -66,11 +66,11 @@
           </div>
           <div class="metric">
             <span class="metric-value">81.7%</span>
-            <span class="metric-label">RoboTwin latency reduction</span>
+            <span class="metric-label">RoboTwin average latency reduction</span>
           </div>
           <div class="metric">
             <span class="metric-value">79.0%</span>
-            <span class="metric-label">real-robot latency reduction</span>
+            <span class="metric-label">real-robot average latency reduction</span>
           </div>
         </div>
       </section>
@@ -104,7 +104,7 @@
 
       <section id="why-adaptive" class="section split" aria-labelledby="why-title">
         <div class="section-copy">
-          <p class="eyebrow">Why adaptive?</p>
+          <p class="eyebrow">Motivation</p>
           <h2 id="why-title">The best future condition is state dependent.</h2>
           <p>
             Controlled depth scans show that video refinement can reduce action error, but the gain saturates and sometimes reverses.
@@ -170,7 +170,7 @@
             <p class="result-note">SANTS keeps strong WAM-style future reasoning while removing much of the video-denoising cost.</p>
             <article>
               <h3>RoboTwin 2.0</h3>
-              <p><strong>94.4%</strong> overall success at <strong>523.7 ms</strong> inference latency.</p>
+              <p><strong>94.4%</strong> overall success at <strong>523.7 ms</strong> average inference latency across RoboTwin tasks.</p>
             </article>
             <article>
               <h3>Ablations</h3>
@@ -185,7 +185,7 @@
                 <tr>
                   <th>Setting</th>
                   <th>Success</th>
-                  <th>Latency</th>
+                  <th>Avg. latency</th>
                   <th>Message</th>
                 </tr>
               </thead>
@@ -196,17 +196,11 @@
                   <td>2868.4 ms</td>
                   <td>Accurate but slow</td>
                 </tr>
-                <tr>
-                  <td>Fast-WAM</td>
-                  <td>91.8%</td>
-                  <td>190 ms</td>
-                  <td>Fast fixed acceleration</td>
-                </tr>
                 <tr class="highlight-row">
                   <td>SANTS</td>
                   <td>94.4%</td>
                   <td>523.7 ms</td>
-                  <td>Best success with large latency reduction</td>
+                  <td>Best success with large average latency reduction</td>
                 </tr>
               </tbody>
             </table>
@@ -221,9 +215,9 @@
       <section id="robots" class="section" aria-labelledby="robots-title">
         <div class="section-heading">
           <p class="eyebrow">Robot evaluation</p>
-          <h2 id="robots-title">SANTS improves real-robot manipulation under tight control latency.</h2>
+          <h2 id="robots-title">SANTS improves real-robot manipulation under tight average control latency.</h2>
           <p>
-            Across bimanual manipulation and UR10 kitchen tasks, SANTS reaches <strong>73.1% mean success</strong> at <strong>581.3 ms</strong> average policy latency by selecting intermediate future-video states without running full video denoising at every decision.
+            Across bimanual manipulation and UR10 kitchen tasks, SANTS reaches <strong>73.1% mean success</strong> at <strong>581.3 ms</strong> average policy latency computed over all seven tasks by selecting intermediate future-video states without running full video denoising at every decision.
           </p>
         </div>
         <div class="robot-video-grid">
